@@ -1,6 +1,7 @@
-transformers
+flask
+gunicorn
 torch
-pillow
-gradio
-sentencepiece
+transformers
 accelerate
+pillow
+sentencepiece
