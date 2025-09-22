@@ -1,0 +1,6 @@
+transformers
+torch
+pillow
+gradio
+sentencepiece
+accelerate
