@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os, torch, re, io
 from PIL import Image
 from flask import Flask, request, jsonify
@@ -10,7 +9,7 @@ app = Flask(__name__)
 blip_model_name = "Salesforce/blip-image-captioning-base"
 blip_processor = BlipProcessor.from_pretrained(blip_model_name)
 blip_model = BlipForConditionalGeneration.from_pretrained(
-    blip_model_name, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32, device_map="auto"
+    blip_model_name, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
 )
 
 trans_model_name = "facebook/m2m100_418M"
@@ -55,7 +54,7 @@ def refine_arabic_text(text_ar):
 
 def analyze_image_bilingual(file):
     image = load_and_compress_image(file)
-    inputs = blip_processor(images=image, return_tensors="pt").to(blip_model.device)
+    inputs = blip_processor(images=image, return_tensors="pt")
     out_ids = blip_model.generate(**inputs, max_new_tokens=50)
     caption_en = blip_processor.decode(out_ids[0], skip_special_tokens=True)
     caption_ar = refine_arabic_text(translate_to_arabic(caption_en))
@@ -81,5 +80,6 @@ def home():
     return jsonify({"message": "Image Captioning API is running"})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
+    port = int(os.environ.get("PORT", 10000))  # Render يحدد المنفذ هنا
     app.run(host="0.0.0.0", port=port)
+
